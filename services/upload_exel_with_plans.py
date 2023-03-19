@@ -8,6 +8,9 @@ from models.models import Dictionary, Plan
 
 
 def upload_plans_from_excel(file, db):
+    """
+    Checks the information from the excel file and inserts the data into the database
+    """
     df = pd.read_excel(io.BytesIO(file.file.read()))
     plans = []
     for i, row in df.iterrows():

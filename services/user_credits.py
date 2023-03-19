@@ -10,6 +10,9 @@ def get_user(user_id: int, db: Session):
 
 
 def get_credits_info(user: User, db: Session):
+    """
+    Collects information about all user credits
+    """
     credits_info = []
     for credit in user.credits:
 

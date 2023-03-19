@@ -7,6 +7,9 @@ from models.models import Credit, Payment, Plan
 
 
 def get_plan_performance_service(check_date: date, db: Session):
+    """
+    Returns information about the execution of plans for a certain date
+    """
     plans = db.query(Plan)\
         .filter(extract("year", Plan.period) == check_date.year)\
         .filter(extract("month", Plan.period) == check_date.month).all()

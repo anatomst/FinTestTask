@@ -15,6 +15,10 @@ upload_csv_router = APIRouter(tags=["Preparation"])
 
 @upload_csv_router.post("/upload_file/{table_name}")
 def upload_csv_file(table_name: str, file: UploadFile = File(...)):
+    """
+    Endpoint for uploading csv files with info about users,
+    credits, dictionary, plans and payments
+    """
     model = TABLES.get(table_name)
     if not model:
         return JSONResponse(content={"error": "Invalid table name"})
@@ -35,6 +39,9 @@ def upload_csv_file(table_name: str, file: UploadFile = File(...)):
 
 @upload_csv_router.post("/db/clean")
 def clean_all_data():
+    """
+    Clean all data in database
+    """
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     return JSONResponse(content={"info": "Your db is empty!"})
