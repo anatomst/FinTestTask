@@ -18,7 +18,7 @@ def get_plan_performance_service(check_date: date, db: Session):
 
     for plan in plans:
         if plan.category.name == "видача":
-            credit_sum = get_sum(Credit, "body", plan.period.replace(day=1), check_date, db)
+            credit_sum = get_sum(Credit, "issuance_date", "body", plan.period.replace(day=1), check_date, db)
 
             plan_performances.append({"month": plan.period,
                                       "category": plan.category.name,
@@ -27,7 +27,7 @@ def get_plan_performance_service(check_date: date, db: Session):
                                       "percent": round(credit_sum / plan.sum * 100, 2) if credit_sum else 0})
 
         if plan.category.name == "збір":
-            payments_sum = get_sum(Payment, "sum", plan.period.replace(day=1), check_date, db)
+            payments_sum = get_sum(Payment, "payment_date", "sum", plan.period.replace(day=1), check_date, db)
 
             plan_performances.append({"month": plan.period,
                                       "category": plan.category.name,
@@ -38,12 +38,12 @@ def get_plan_performance_service(check_date: date, db: Session):
     return plan_performances
 
 
-def get_sum(table: Base, sum_column: str, first_day: date, check_date: date, db: Session):
+def get_sum(table: Base, date_column: str, sum_column: str, first_day: date, check_date: date, db: Session):
     """
     Calculates the amount of loans issued or the amount of payments for
     the period from the beginning of the plan month to the received date
     """
     return db.query(table).filter(and_(
-        Payment.payment_date >= datetime.combine(first_day, time.min),
-        Payment.payment_date <= datetime.combine(check_date, time.max))
+        getattr(table, date_column) >= datetime.combine(first_day, time.min),
+        getattr(table, date_column) <= datetime.combine(check_date, time.max))
     ).with_entities(func.sum(getattr(table, sum_column))).scalar() or 0
