@@ -8,6 +8,7 @@ FastAPI project to get statistics
 * Get user credits info by API "/user_credits/{user_id}"
 * Insert new plans by API "/plans_insert"
 * Get plans performance by API "/plans_performance"
+* Get year performance info by API "/year_performance"
 
 ## Installation with GitHub
 
