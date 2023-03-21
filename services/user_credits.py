@@ -45,4 +45,4 @@ def get_credits_info(user: User, db: Session):
 
         credits_info.append(credit_info)
 
-        return credits_info
+    return credits_info
